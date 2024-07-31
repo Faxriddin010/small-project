@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
+
+.container {
+    background: rgb(241, 247, 160);
+    border-radius: 20px;
+    max-width: 1300px;
+    margin: 20px auto;
+    padding: 50px;
+    transition: .5s ease-in-out
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tabsheader {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.line {
+    content: "";
+    width: 3px;
+    height: 250px;
+    background: #333;
+    margin-right: 20px;
+}   
+
+.tab {
+    margin-bottom: 10px;
+    transition: .4s ease-in-out;
+    cursor: pointer;
+}
+
+.active {
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.tabscontent {
+    position: relative;
+    display: flex;;
+    background: rgba(0, 0, 0, 0.171);
+    padding: 10px;
+}
+
+
+img {
+    width: 900px;
+}
+
+p {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    font-size: 25px;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

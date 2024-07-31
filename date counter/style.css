@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.container {
+    max-width:  85%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 73px auto;
+    background: rgb(241, 247, 160);
+    border-radius: 30px;
+    padding: 20px;
+}
+
+.information {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin-bottom: 0px;
+    height: 20vh;
+}
+
+input.date {
+    width: 70%;
+    height: 90%;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center ;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    font-size: 30px;
+    color: black;
+    transition: all .4s ease-in;
+}
+
+button.date {
+    width: 20%;
+    height: 90%;
+    border: 3px solid black;
+    border-radius: 20px;
+    font-size: 30px;
+    font-weight: 800;
+    background: transparent;
+    transition: all .1s ease-out;
+}
+
+button.date:hover {
+    background: black;
+    color: rgb(241, 247, 160);
+}
+
+.timer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 50px;
+    padding: 10px;
+}
+
+.timerblock {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+    background: rgb(42, 42, 145);
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 30px;
+    color: black;
+}
+
+.timerblock span {
+    color: white;
+    font-size: 50px;
+    font-weight: 700;
+}
+
+li {
+    color: red;
+}
+
+.change {
+    color: white;
+    font-size: 50px;
+    font-weight: 700;
+}
