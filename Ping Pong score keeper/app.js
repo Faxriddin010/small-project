@@ -59,5 +59,7 @@ window.addEventListener('DOMContentLoaded', () => {
         player2 = 0
         player1Score.textContent = player1
         player2Score.textContent = player2
+        player1Btn.disabled = false
+        player2Btn.disabled = false
     }
 })
