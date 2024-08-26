@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript</title>
+    <link
+      rel="shortcut icon"
+      href="Faddi logo mini - png.png"
+      type="image/x-icon"
+    />
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Aldrich&display=swap);
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+      }
+
+      body {
+        font-family: "Aldrich", sans-serif;
+      }
+
+      .container {
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(160deg, darkblue, aqua);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container h1 {
+        font-size: 100px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .container p {
+        margin-top: 20px;
+        font-size: 25px;
+        font-weight: 600;
+        opacity: 0.7;
+        margin-bottom: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+
+      input {
+        outline: none;
+        border: none;
+        width: 300px;
+        height: 50px;
+        padding: 10px 10px;
+        font-size: 34px;
+        border-radius: 7px;
+      }
+
+      button {
+        border: none;
+        outline: none;
+        background: darkblue;
+        width: 150px;
+        height: 50px;
+        border-radius: 10px;
+        cursor: pointer;
+        color: white;
+        font-size: 25px;
+        transition: all 0.4s ease-in-out;
+      }
+
+      button:hover {
+        border: 3px solid darkblue;
+        background: transparent;
+        color: darkblue;
+      }
+
+      .reset {
+        background: darkgreen;
+      }
+
+      .reset:hover {
+        border-color: darkgreen;
+        color: darkgreen;
+      }
+
+      .message {
+        cursor: text;
+        font-size: 25px;
+        margin-top: 10px;
+      }
+
+      .success {
+        border: 5px solid greenyellow;
+        box-shadow: 3px 4px 29px 3px rgba(0, 255, 8, 0.71);
+        -webkit-box-shadow: 3px 4px 29px 3px rgba(0, 255, 8, 0.71);
+        -moz-box-shadow: 3px 4px 29px 3px rgba(0, 255, 8, 0.71);
+      }
+
+      .error {
+        border: 5px solid tomato;
+        box-shadow: 3px 4px 29px 3px rgba(255, 0, 0, 0.71);
+        -webkit-box-shadow: 3px 4px 29px 3px rgba(255, 0, 0, 0.71);
+        -moz-box-shadow: 3px 4px 29px 3px rgba(255, 0, 0, 0.71);
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          color: #000;
+        }
+
+        form {
+          flex-direction: column;
+        }
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Theme</h1>
+      <p>
+        by
+        <a href="https://www.github.com/Fakhriddin010"
+          >Fakhriddin Bakhtiyorov</a
+        >
+      </p>
+      <form id="signup-form">
+        <input
+          name="value"
+          type="number"
+          id="number"
+          placeholder="number"
+          max="100"
+          min="1"
+        />
+        <button type="submit">Submit</button>
+        <button type="reset" class="reset">Reset</button>
+      </form>
+      <div class="message"></div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
