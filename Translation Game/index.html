@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Translation Game</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        />
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f0f8ff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+
+            .container {
+                text-align: center;
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                width: 300px;
+            }
+
+            h1 {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+            .word-item {
+                margin-bottom: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .word-item input {
+                margin-left: 10px;
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            #check-btn,
+            #add-word-btn {
+                background-color: #4caf50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+
+            #check-btn:hover,
+            #add-word-btn:hover {
+                background-color: #45a049;
+            }
+
+            #score {
+                margin-top: 20px;
+                font-size: 18px;
+                color: #333;
+            }
+
+            /* Modal styling */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.4);
+                justify-content: center;
+                align-items: center;
+            }
+
+            .modal-content {
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                width: 300px;
+                text-align: center;
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            input {
+                width: 80%;
+                padding: 5px;
+                margin-bottom: 10px;
+            }
+
+            /* Previous styles remain the same */
+            #shuffle-btn {
+                background-color: #f39c12;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+
+            #shuffle-btn:hover {
+                background-color: #e67e22;
+            }
+
+            /* Previous styles remain the same */
+            /* Ikonka uchun styling */
+            .delete-icon {
+                color: #e74c3c;
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 20px;
+            }
+
+            .delete-icon:hover {
+                color: #c0392b;
+            }
+
+            /* Iconka uslublari */
+            .edit-icon,
+            .delete-icon {
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 20px;
+            }
+
+            .edit-icon {
+                color: #3498db;
+            }
+
+            .edit-icon:hover {
+                color: #2980b9;
+            }
+
+            .delete-icon {
+                color: #e74c3c;
+            }
+
+            .delete-icon:hover {
+                color: #c0392b;
+            }
+
+            /* Modal for adding new words */
+            .modal,
+            .edit-modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4); /* Background dimming */
+            }
+
+            /* Modal content (same for both modals) */
+            .modal-content,
+            .edit-modal-content {
+                background-color: #fefefe;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 30%;
+                max-width: 400px;
+                position: relative;
+            }
+
+            /* Close button (X icon) - Same for both modals */
+            .close,
+            .close-edit {
+                color: #aaa;
+                font-size: 28px;
+                font-weight: bold;
+                position: absolute;
+                top: 10px;
+                right: 15px; /* Align to the right with a bit of margin */
+                cursor: pointer;
+            }
+
+            .close:hover,
+            .close:focus,
+            .close-edit:hover,
+            .close-edit:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* Save Changes button styling */
+            #save-edit-btn,
+            #save-word-btn {
+                background-color: #4caf50; /* Green background */
+                color: white; /* White text */
+                padding: 10px 20px; /* Padding for better size */
+                border: none; /* Remove default border */
+                border-radius: 5px; /* Rounded corners */
+                cursor: pointer; /* Pointer cursor on hover */
+                font-size: 16px; /* Slightly bigger text */
+                transition: background-color 0.3s ease; /* Smooth background color transition */
+            }
+
+            #save-edit-btn:hover,
+            #save-word-btn:hover {
+                background-color: #45a049; /* Darker green on hover */
+            }
+
+            #save-edit-btn:focus,
+            #save-word-btn:focus {
+                outline: none; /* Remove outline on focus */
+                box-shadow: 0 0 5px rgba(0, 128, 0, 0.5); /* Green glow on focus */
+            }
+
+            .footer {
+                text-align: center; /* Center text */
+                margin-top: 20px; /* Margin above the footer */
+                font-size: 14px; /* Font size for footer text */
+                color: #555; /* Color for the footer text */
+            }
+
+            .footer a {
+                color: #4caf50; /* Link color */
+                text-decoration: none; /* Remove underline from links */
+            }
+
+            .footer a:hover {
+                text-decoration: underline; /* Underline link on hover */
+            }
+
+            /* New Game button styling */
+            #new-game-btn {
+                background-color: #007bff; /* Blue background */
+                color: white; /* White text */
+                padding: 10px 20px; /* Padding for better size */
+                border: none; /* Remove default border */
+                border-radius: 5px; /* Rounded corners */
+                cursor: pointer; /* Pointer cursor on hover */
+                font-size: 16px; /* Slightly bigger text */
+                transition: background-color 0.3s ease; /* Smooth background color transition */
+                margin: 5px; /* Space between buttons */
+            }
+
+            #new-game-btn:hover {
+                background-color: #0056b3; /* Darker blue on hover */
+            }
+
+            #new-game-btn:focus {
+                outline: none; /* Remove outline on focus */
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Blue glow on focus */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Translation Game</h1>
+            <div id="word-list">
+                <!-- Word list will be dynamically generated here -->
+            </div>
+            <button id="check-btn">Check</button>
+            <button id="add-word-btn">Add New Word</button>
+            <button id="shuffle-btn">Shuffle Words</button>
+            <button id="new-game-btn">New Game</button>
+            <div id="score"></div>
+            <div class="footer">
+                <p>
+                    by
+                    <a href="https://github.com/Faxriddin010" target="_blank"
+                        >FynTech</a
+                    >
+                </p>
+            </div>
+        </div>
+
+        <!-- Modal for adding new words -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add New Word</h2>
+                <label for="new-word">English Word:</label>
+                <input
+                    type="text"
+                    id="new-word"
+                    placeholder="Enter English word"
+                />
+                <label for="new-translation">Translation:</label>
+                <input
+                    type="text"
+                    id="new-translation"
+                    placeholder="Enter translation"
+                />
+                <button id="save-word-btn">Save Word</button>
+            </div>
+        </div>
+
+        <!-- Modal for editing existing words -->
+        <div id="edit-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-edit">&times;</span>
+                <h2>Edit Word</h2>
+                <label for="edit-word">English Word:</label>
+                <input
+                    type="text"
+                    id="edit-word"
+                    placeholder="Edit English word"
+                />
+                <label for="edit-translation">Translation:</label>
+                <input
+                    type="text"
+                    id="edit-translation"
+                    placeholder="Edit translation"
+                />
+                <button id="save-edit-btn">Save Changes</button>
+            </div>
+        </div>
+
+        <script>
+            let words = [];
+
+            const wordListDiv = document.getElementById("word-list");
+            let editIndex = null; // Global variable to store the index of the word being edited
+
+            function displayWords() {
+                wordListDiv.innerHTML = ""; // Clear existing words
+                words.forEach((word, index) => {
+                    const wordItem = document.createElement("div");
+                    wordItem.className = "word-item";
+
+                    const wordText = document.createElement("span");
+                    wordText.textContent = word.english;
+
+                    const inputField = document.createElement("input");
+                    inputField.type = "text";
+                    inputField.id = `input-${index}`;
+
+                    const resultDiv = document.createElement("div");
+                    resultDiv.className = "result";
+                    resultDiv.id = `result-${index}`;
+
+                    // Delete icon (Font Awesome)
+                    const deleteIcon = document.createElement("i");
+                    deleteIcon.className = "fas fa-trash delete-icon";
+                    deleteIcon.onclick = function () {
+                        deleteWord(index);
+                    };
+
+                    // Edit icon (Font Awesome)
+                    const editIcon = document.createElement("i");
+                    editIcon.className = "fas fa-edit edit-icon";
+                    editIcon.onclick = function () {
+                        openEditModal(index);
+                    };
+
+                    wordItem.appendChild(wordText);
+                    wordItem.appendChild(inputField);
+                    wordItem.appendChild(resultDiv);
+                    wordItem.appendChild(editIcon);
+                    wordItem.appendChild(deleteIcon);
+                    wordListDiv.appendChild(wordItem);
+                });
+            }
+
+            displayWords();
+
+            // Check translations
+            document
+                .getElementById("check-btn")
+                .addEventListener("click", () => {
+                    let score = 0;
+
+                    words.forEach((word, index) => {
+                        const userInput = document
+                            .getElementById(`input-${index}`)
+                            .value.trim();
+                        const resultDiv = document.getElementById(
+                            `result-${index}`
+                        );
+
+                        if (
+                            userInput.toLowerCase() ===
+                            word.translation.toLowerCase()
+                        ) {
+                            score++;
+                            resultDiv.textContent = "Correct!";
+                            resultDiv.style.color = "green";
+                        } else {
+                            resultDiv.textContent = `Incorrect! Correct: ${word.translation}`;
+                            resultDiv.style.color = "red";
+                        }
+                    });
+
+                    document.getElementById(
+                        "score"
+                    ).textContent = `Your score: ${score} / ${words.length}`;
+                });
+
+            // Shuffle words
+            document
+                .getElementById("shuffle-btn")
+                .addEventListener("click", () => {
+                    words = shuffleArray(words);
+                    displayWords();
+                });
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // Delete word
+            function deleteWord(index) {
+                words.splice(index, 1);
+                displayWords();
+            }
+
+            // Open the edit modal and fill in the current word
+            function openEditModal(index) {
+                editIndex = index; // Save the index of the word being edited
+                document.getElementById("edit-word").value =
+                    words[index].english;
+                document.getElementById("edit-translation").value =
+                    words[index].translation;
+                document.getElementById("edit-modal").style.display = "flex";
+            }
+
+            // Save the edited word
+            document
+                .getElementById("save-edit-btn")
+                .addEventListener("click", () => {
+                    const editedWord = document
+                        .getElementById("edit-word")
+                        .value.trim();
+                    const editedTranslation = document
+                        .getElementById("edit-translation")
+                        .value.trim();
+
+                    if (editedWord && editedTranslation && editIndex !== null) {
+                        words[editIndex].english = editedWord;
+                        words[editIndex].translation = editedTranslation;
+                        displayWords();
+                        document.getElementById("edit-modal").style.display =
+                            "none";
+                    } else {
+                        alert("Please fill out both fields.");
+                    }
+                });
+
+            // Function to open "Add new word" modal
+            document
+                .getElementById("add-word-btn")
+                .addEventListener("click", () => {
+                    document.getElementById("modal").style.display = "flex";
+                });
+
+            // Save new word from the modal
+            document
+                .getElementById("save-word-btn")
+                .addEventListener("click", () => {
+                    const newWord = document
+                        .getElementById("new-word")
+                        .value.trim();
+                    const newTranslation = document
+                        .getElementById("new-translation")
+                        .value.trim();
+
+                    if (newWord && newTranslation) {
+                        words.push({
+                            english: newWord,
+                            translation: newTranslation,
+                        });
+                        displayWords();
+                        document.getElementById("modal").style.display = "none";
+                        document.getElementById("new-word").value = "";
+                        document.getElementById("new-translation").value = "";
+                    } else {
+                        alert("Please fill out both fields.");
+                    }
+                });
+
+            // Close modals
+            document.querySelector(".close").onclick = function () {
+                document.getElementById("modal").style.display = "none";
+            };
+
+            document.querySelector(".close-edit").onclick = function () {
+                document.getElementById("edit-modal").style.display = "none";
+            };
+
+            // Close the modal if user clicks outside of it
+            window.onclick = function (event) {
+                if (event.target == document.getElementById("modal")) {
+                    document.getElementById("modal").style.display = "none";
+                }
+                if (event.target == document.getElementById("edit-modal")) {
+                    document.getElementById("edit-modal").style.display =
+                        "none";
+                }
+            };
+
+            // Add event listener for New Game button
+            document
+                .getElementById("new-game-btn")
+                .addEventListener("click", function () {
+                    // Clear existing results
+                    document.getElementById("score").innerHTML = "";
+
+                    // Restore input fields (optional)
+                    const wordInputs = document.querySelectorAll(".word-input");
+                    wordInputs.forEach((input) => (input.value = ""));
+
+                    // Optionally, reset or refresh the word list display
+                    displayWords(); // Assuming this function displays the words again
+                });
+        </script>
+    </body>
+</html>
