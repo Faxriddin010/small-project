@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Physics Simulation</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background: linear-gradient(to right, #4facfe, #00f2fe);
+            }
+
+            .container {
+                text-align: center;
+            }
+
+            h1 {
+                color: white;
+                margin-bottom: 20px;
+            }
+
+            canvas {
+                border: 1px solid #fff;
+                display: block;
+                margin: 0 auto 20px auto;
+                background: #222;
+            }
+
+            .controls {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            input {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            button {
+                padding: 10px 20px;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Physics Simulation</h1>
+            <div class="controls">
+                <button id="gravitySim">Gravity Only</button>
+                <button id="forceSim">Forces & Gravity</button>
+                <button id="archimedesSim">Archimedes Force</button>
+                <input type="number" id="gravity" placeholder="Gravity" />
+                <input type="number" id="forceX" placeholder="Force X" />
+                <input type="number" id="forceY" placeholder="Force Y" />
+                <input type="number" id="buoyancy" placeholder="Buoyancy" />
+            </div>
+            <canvas id="simulationCanvas" width="600" height="400"></canvas>
+        </div>
+        <script>
+            const canvas = document.getElementById("simulationCanvas");
+            const ctx = canvas.getContext("2d");
+
+            let ball = { x: 300, y: 200, radius: 20, vx: 0, vy: 0 };
+            let gravity = 9.8;
+            let forceX = 0;
+            let forceY = 0;
+            let buoyancy = 0;
+            let mode = "gravity";
+            let animationFrame;
+
+            function drawBall() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Suv effekti
+                if (mode === "archimedes") {
+                    ctx.fillStyle = "#4facfe";
+                    ctx.fillRect(
+                        0,
+                        canvas.height / 2,
+                        canvas.width,
+                        canvas.height / 2
+                    );
+                }
+
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "#ff5722";
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            function updateBall() {
+                gravity =
+                    parseFloat(document.getElementById("gravity").value) || 9.8;
+                if (mode === "gravity") {
+                    ball.vy += gravity * 0.01;
+                } else if (mode === "forces") {
+                    ball.vx += forceX * 0.01;
+                    ball.vy += (forceY + gravity) * 0.01;
+                } else if (mode === "archimedes") {
+                    let netForceY = gravity - buoyancy;
+                    ball.vy += netForceY * 0.01;
+                }
+
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+
+                if (
+                    ball.x - ball.radius < 0 ||
+                    ball.x + ball.radius > canvas.width
+                ) {
+                    ball.vx *= -0.8;
+                    ball.x = Math.max(
+                        ball.radius,
+                        Math.min(ball.x, canvas.width - ball.radius)
+                    );
+                }
+                if (
+                    ball.y - ball.radius < 0 ||
+                    ball.y + ball.radius > canvas.height
+                ) {
+                    ball.vy *= -0.8;
+                    ball.y = Math.max(
+                        ball.radius,
+                        Math.min(ball.y, canvas.height - ball.radius)
+                    );
+                }
+            }
+
+            function animate() {
+                updateBall();
+                drawBall();
+                animationFrame = requestAnimationFrame(animate);
+            }
+
+            document
+                .getElementById("gravitySim")
+                .addEventListener("click", () => {
+                    cancelAnimationFrame(animationFrame);
+                    ball = { x: 300, y: 200, radius: 20, vx: 0, vy: 0 };
+                    mode = "gravity";
+                    animate();
+                });
+
+            document
+                .getElementById("forceSim")
+                .addEventListener("click", () => {
+                    cancelAnimationFrame(animationFrame);
+                    ball = { x: 300, y: 200, radius: 20, vx: 0, vy: 0 };
+                    forceX =
+                        parseFloat(document.getElementById("forceX").value) ||
+                        0;
+                    forceY =
+                        parseFloat(document.getElementById("forceY").value) ||
+                        0;
+                    mode = "forces";
+                    animate();
+                });
+
+            document
+                .getElementById("archimedesSim")
+                .addEventListener("click", () => {
+                    cancelAnimationFrame(animationFrame);
+                    ball = { x: 300, y: 200, radius: 20, vx: 0, vy: 0 };
+                    buoyancy =
+                        parseFloat(document.getElementById("buoyancy").value) ||
+                        0;
+                    mode = "archimedes";
+                    animate();
+                });
+
+            drawBall();
+        </script>
+    </body>
+</html>
