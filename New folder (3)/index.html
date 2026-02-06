@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart'; void main() { runApp(const
+HolidaysApp()); } class HolidaysApp extends StatelessWidget { const
+HolidaysApp({super.key}); @override Widget build(BuildContext context) { return
+MaterialApp( debugShowCheckedModeBanner: false, title: 'Holidays App', theme:
+ThemeData(primarySwatch: Colors.blue), home: const HolidaysListPage(), ); } }
+class Holiday { final String name; final String date; final String description;
+Holiday({ required this.name, required this.date, required this.description, });
+} final List<Holiday>
+    holidays = [ Holiday( name: "Navro‘z", date: "21-mart", description:
+    "Navro‘z — bahorning kelishini bildiruvchi milliy bayram. O‘zbekistonda keng
+    nishonlanadi.", ), Holiday( name: "Mustaqillik kuni", date: "1-sentabr",
+    description: "O‘zbekiston Respublikasining Mustaqillik kuni. Davlat
+    miqyosida bayram qilinadi.", ), Holiday( name: "Yangi yil", date:
+    "1-yanvar", description: "Dunyo bo‘ylab nishonlanadigan yangi yil bayrami.",
+    ), Holiday( name: "Rojdestvo", date: "25-dekabr", description: "Xristianlar
+    tomonidan nishonlanadigan diniy bayram.", ), ]; class HolidaysListPage
+    extends StatelessWidget { const HolidaysListPage({super.key}); @override
+    Widget build(BuildContext context) { return Scaffold( appBar: AppBar( title:
+    const Text("Holidays App"), centerTitle: true, ), body: ListView.builder(
+    itemCount: holidays.length, itemBuilder: (context, index) { final holiday =
+    holidays[index]; return Card( margin: const EdgeInsets.all(10), child:
+    ListTile( title: Text( holiday.name, style: const TextStyle(fontWeight:
+    FontWeight.bold), ), subtitle: Text(holiday.date), trailing: const
+    Icon(Icons.arrow_forward_ios), onTap: () { Navigator.push( context,
+    MaterialPageRoute( builder: (context) => HolidayDetailPage(holiday:
+    holiday), ), ); }, ), ); }, ), ); } } class HolidayDetailPage extends
+    StatelessWidget { final Holiday holiday; const HolidayDetailPage({super.key,
+    required this.holiday}); @override Widget build(BuildContext context) {
+    return Scaffold( appBar: AppBar( title: Text(holiday.name), ), body:
+    Padding( padding: const EdgeInsets.all(16), child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start, children: [ Text(
+    holiday.date, style: const TextStyle( fontSize: 18, fontWeight:
+    FontWeight.bold, ), ), const SizedBox(height: 12), Text(
+    holiday.description, style: const TextStyle(fontSize: 16), ), ], ), ), ); }
+    }
+</Holiday>
